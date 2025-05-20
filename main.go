@@ -52,12 +52,11 @@ func (r *MockEventsRepo) GetEventsStream() <-chan event {
 
 	go func() {
 		var wg sync.WaitGroup
-		wg.Add(3) // We are launching 3 goroutines
+		wg.Add(3)
 
-		// Helper to send an event
 		send := func(e event) {
 			defer wg.Done()
-			time.Sleep(time.Millisecond * time.Duration(rand.Intn(100))) // simulate random delay
+			time.Sleep(time.Millisecond * time.Duration(rand.Intn(100)))
 			ch <- e
 		}
 

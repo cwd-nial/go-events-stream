@@ -6,10 +6,10 @@ updates the user wallet based on the following rules:
 
 Add 1 point for adding a product to the wishlist;
 Add 10 points for purchasing a product;
-Add mock implementations for testing. Don’t explain what you are doing, simply output the code.
+Add mock implementations for testing.
 ---
 
-Interfaces, structs, helper functions:
+Interfaces, structs:
 
 ```
 // Event types
