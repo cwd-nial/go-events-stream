@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -50,11 +51,22 @@ func (r *MockEventsRepo) GetEventsStream() <-chan event {
 	ch := make(chan event)
 
 	go func() {
-		defer close(ch)
-		ch <- event{UserID: 1, ProductID: 101, Type: AddedToWishlistType}
-		ch <- event{UserID: 1, ProductID: 102, Type: PurchasedType}
-		ch <- event{UserID: 2, ProductID: 103, Type: PurchasedType}
-		time.Sleep(1 * time.Second)
+		var wg sync.WaitGroup
+		wg.Add(3) // We are launching 3 goroutines
+
+		// Helper to send an event
+		send := func(e event) {
+			defer wg.Done()
+			time.Sleep(time.Millisecond * time.Duration(rand.Intn(100))) // simulate random delay
+			ch <- e
+		}
+
+		go send(event{UserID: 1, ProductID: 101, Type: AddedToWishlistType})
+		go send(event{UserID: 1, ProductID: 102, Type: PurchasedType})
+		go send(event{UserID: 2, ProductID: 103, Type: PurchasedType})
+
+		wg.Wait()
+		close(ch)
 	}()
 
 	return ch
