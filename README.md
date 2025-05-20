@@ -12,33 +12,26 @@ Add mock implementations for testing. Don’t explain what you are doing, simply
 Interfaces, structs, helper functions:
 
 ```
-type UserWalletService interface {
-    AddBonusPoints(userId uint, points int) error
+// Event types
+const (
+	AddedToWishlistType EventType = "added_to_wishlist"
+	PurchasedType       EventType = "purchased"
+)
+
+type EventType string
+
+type event struct {
+	UserID    uint      `json:"userId"`
+	ProductID uint      `json:"productId"`
+	Type      EventType `json:"type"`
 }
 
-type Event interface {
-    Name() string
+// Interfaces
+type UserWalletService interface {
+	AddBonusPoints(userId uint, points int) error
 }
 
 type EventsRepository interface {
-    GetEventsStream() <-chan Event
-}
-
-type ProductAddedToWishlist struct {
-    UserID uint `json:"userId"`
-    ProductID uint `json:"productId"`
-}
-
-func (p ProductAddedToWishlist) Name() string {
-    return "product.addedToWishlist"
-}
-
-type ProductPurchased struct {
-    UserID uint `json:"userId"`
-    ProductID uint `json:"productId"`
-}
-
-func (p ProductPurchased) Name() string {
-    return "product.purchased"
+	GetEventsStream() <-chan event
 }
 ```
