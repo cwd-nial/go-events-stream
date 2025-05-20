@@ -14,7 +14,7 @@ const (
 
 type EventType string
 
-type event struct {
+type Event struct {
 	UserID    uint      `json:"userId"`
 	ProductID uint      `json:"productId"`
 	Type      EventType `json:"type"`
@@ -25,7 +25,7 @@ type UserWalletService interface {
 }
 
 type EventsRepository interface {
-	GetEventsStream() <-chan event
+	GetEventsStream() <-chan Event
 }
 
 type WalletService struct {
@@ -47,22 +47,22 @@ func (ws *WalletService) AddBonusPoints(userId uint, points int) error {
 
 type MockEventsRepo struct{}
 
-func (r *MockEventsRepo) GetEventsStream() <-chan event {
-	ch := make(chan event)
+func (r *MockEventsRepo) GetEventsStream() <-chan Event {
+	ch := make(chan Event)
 
 	go func() {
 		var wg sync.WaitGroup
 		wg.Add(3)
 
-		send := func(e event) {
+		send := func(e Event) {
 			defer wg.Done()
 			time.Sleep(time.Millisecond * time.Duration(rand.Intn(100)))
 			ch <- e
 		}
 
-		go send(event{UserID: 1, ProductID: 101, Type: AddedToWishlistType})
-		go send(event{UserID: 1, ProductID: 102, Type: PurchasedType})
-		go send(event{UserID: 2, ProductID: 103, Type: PurchasedType})
+		go send(Event{UserID: 1, ProductID: 101, Type: AddedToWishlistType})
+		go send(Event{UserID: 1, ProductID: 102, Type: PurchasedType})
+		go send(Event{UserID: 2, ProductID: 103, Type: PurchasedType})
 
 		wg.Wait()
 		close(ch)
