@@ -1,12 +1,13 @@
-TASK
-====
+Task: simple events-stream listener application 
+===============================================
 
 Using the following types as a starting point, create a simple golang application that listens to the events stream and
 updates the user wallet based on the following rules:
 
-Add 1 point for adding a product to the wishlist;
-Add 10 points for purchasing a product;
-Add mock implementations for testing.
+- Add 1 point for adding a product to the wishlist
+- Add 10 points for purchasing a product
+- Add a mock implementations for testing
+
 ---
 
 Interfaces, structs:
